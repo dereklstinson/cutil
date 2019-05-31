@@ -1,4 +1,4 @@
-package ctype
+package cutil
 
 import (
 	"errors"
