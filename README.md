@@ -52,3 +52,7 @@ func cscalarbydatatype(dtype DataType, num float64) ctype.CScalar {
 }
 
 ````
+
+## Note
+
+I will add to this library where it is needed.

@@ -26,6 +26,7 @@ func (g *Wrapper) DPtr() *unsafe.Pointer {
 	return &g.ptr
 }
 
+/*
 //OffSet returns a new GoMem
 func (g *Wrapper) OffSet(byunits uint) *Wrapper {
 
@@ -43,6 +44,7 @@ func (g *Wrapper) TotalBytes() uint {
 	return g.unitlen * g.unitbytes
 
 }
+*/
 
 //WrapGoMem returns a GoMem considering the input type.
 //Will only support slices and pointers to go types
@@ -132,6 +134,9 @@ func WrapGoMem(input interface{}) (*Wrapper, error) {
 		ptr.ptr = unsafe.Pointer(val)
 		ptr.unitlen = 1
 		ptr.unitbytes = (uint)(unsafe.Sizeof(val))
+		return ptr, nil
+	case unsafe.Pointer:
+		ptr.ptr = val
 		return ptr, nil
 	default:
 		thetype := fmt.Errorf("Type %T", val)
