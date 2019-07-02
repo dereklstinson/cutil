@@ -140,5 +140,14 @@ type CBool C.bool
 //SIB returns the number of bytes the CScalar has
 func (c CBool) SIB() uint { return (uint)(C.sizeof_bool) }
 
-//CPtr retunrs an unsafe pointer for CUInt8
+//CPtr retunrs an unsafe pointer for CBool
 func (c CBool) CPtr() unsafe.Pointer { return (unsafe.Pointer)(&c) }
+
+//CSizet is a wrapper for C.size_t
+type CSizet C.size_t
+
+//SIB returns the number of bytes the CScalar has
+func (c CSizet) SIB() uint { return (uint)(C.sizeof_size_t) }
+
+//CPtr retunrs an unsafe pointer for CSizet
+func (c CSizet) CPtr() unsafe.Pointer { return (unsafe.Pointer)(&c) }
