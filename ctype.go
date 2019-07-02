@@ -1,5 +1,7 @@
 package cutil
 
+//#include <stdbool.h>
+//#include <stdio.h>
 import "C"
 import (
 	"unsafe"
@@ -61,15 +63,9 @@ func CScalarConversion(gotype interface{}) CScalar {
 	case half.Float16:
 		return CHalf(x)
 	case bool:
-
-		if x == true {
-			return CUChar(255)
-		}
-		return CUChar(0)
-
+		return (CBool)(x)
 	case CScalar:
 		return x
-
 	default:
 		return nil
 	}
@@ -82,7 +78,7 @@ type CHalf C.ushort
 func (f CHalf) CPtr() unsafe.Pointer { return unsafe.Pointer(&f) }
 
 //SIB returns the number of bytes the CScalar has as an sizeT
-func (f CHalf) SIB() uint { return (4) }
+func (f CHalf) SIB() uint { return (2) }
 
 //CFloat is a float in C
 type CFloat C.float
@@ -137,3 +133,12 @@ func (c CUChar) SIB() uint { return 1 }
 
 //CPtr retunrs an unsafe pointer for CUInt8
 func (c CUChar) CPtr() unsafe.Pointer { return unsafe.Pointer(&c) }
+
+//CBool is a wrapper for C.bool it is in the stdbool.h header
+type CBool C.bool
+
+//SIB returns the number of bytes the CScalar has
+func (c CBool) SIB() uint { return (uint)(C.sizeof_bool) }
+
+//CPtr retunrs an unsafe pointer for CUInt8
+func (c CBool) CPtr() unsafe.Pointer { return (unsafe.Pointer)(&c) }
