@@ -16,6 +16,15 @@ type Wrapper struct {
 	typeflag  int
 }
 
+//CreateUnsafeWrapper creates Wrapper from an unsafe.Pointer
+func CreateUnsafeWrapper(p unsafe.Pointer, sib uint) *Wrapper {
+	return &Wrapper{
+		ptr:       p,
+		unitbytes: 1,
+		unitlen:   sib,
+	}
+}
+
 //Ptr is an unsafe.Pointer of some cuda memory
 func (g *Wrapper) Ptr() unsafe.Pointer {
 	return g.ptr
@@ -24,6 +33,12 @@ func (g *Wrapper) Ptr() unsafe.Pointer {
 //DPtr is a double pointer of the unsafe.Pointer
 func (g *Wrapper) DPtr() *unsafe.Pointer {
 	return &g.ptr
+}
+
+//SIB returns the size in bytes the wrapper has.
+func (g *Wrapper) SIB() (sib uint) {
+	return g.unitlen * g.unitbytes
+
 }
 
 /*
@@ -134,9 +149,6 @@ func WrapGoMem(input interface{}) (*Wrapper, error) {
 		ptr.ptr = unsafe.Pointer(val)
 		ptr.unitlen = 1
 		ptr.unitbytes = (uint)(unsafe.Sizeof(val))
-		return ptr, nil
-	case unsafe.Pointer:
-		ptr.ptr = val
 		return ptr, nil
 	default:
 		thetype := fmt.Errorf("Type %T", val)

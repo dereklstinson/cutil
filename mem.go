@@ -4,8 +4,8 @@ import "unsafe"
 
 //Mem is mem that is shared betweek cuda packages
 type Mem interface {
-	Ptr() unsafe.Pointer
-	DPtr() *unsafe.Pointer
+	Pointer
+	DPointer
 }
 
 //Pointer interface returns an unsafe.Pointer
