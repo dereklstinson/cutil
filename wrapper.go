@@ -13,27 +13,19 @@ type Wrapper struct {
 	ptr       unsafe.Pointer
 	unitlen   uint
 	unitbytes uint
-	typeflag  int
+	//	typeflag  int
 }
 
 //CreateUnsafeWrapper creates Wrapper from an unsafe.Pointer
 func CreateUnsafeWrapper(p unsafe.Pointer, sib uint) *Wrapper {
-	return &Wrapper{
-		ptr:       p,
-		unitbytes: 1,
-		unitlen:   sib,
-	}
+	return &Wrapper{ptr: p, unitbytes: 1, unitlen: sib}
 }
 
-//Ptr is an unsafe.Pointer of some cuda memory
-func (g *Wrapper) Ptr() unsafe.Pointer {
-	return g.ptr
-}
+//Ptr satisfies Pointer interface
+func (g *Wrapper) Ptr() unsafe.Pointer { return g.ptr }
 
-//DPtr is a double pointer of the unsafe.Pointer
-func (g *Wrapper) DPtr() *unsafe.Pointer {
-	return &g.ptr
-}
+//DPtr satisfies DPointer interface
+func (g *Wrapper) DPtr() *unsafe.Pointer { return &g.ptr }
 
 //SIB returns the size in bytes the wrapper has.
 func (g *Wrapper) SIB() (sib uint) {
@@ -64,26 +56,22 @@ func (g *Wrapper) TotalBytes() uint {
 //WrapGoMem returns a GoMem considering the input type.
 //Will only support slices and pointers to go types
 func WrapGoMem(input interface{}) (*Wrapper, error) {
-	//fname:="MakeGoPointer"
 	ptr := new(Wrapper)
 	switch val := input.(type) {
 	case []int:
 		ptr.ptr = unsafe.Pointer(&val[0])
 		ptr.unitlen = (uint)(len(val))
 		ptr.unitbytes = (uint)(unsafe.Sizeof(val[0]))
-		ptr.typeflag = 1
 		return ptr, nil
 	case []int8:
 		ptr.ptr = unsafe.Pointer(&val[0])
 		ptr.unitlen = (uint)(len(val))
 		ptr.unitbytes = (uint)(unsafe.Sizeof(val[0]))
-		ptr.typeflag = 2
 		return ptr, nil
 	case []byte:
 		ptr.ptr = unsafe.Pointer(&val[0])
 		ptr.unitlen = (uint)(len(val))
 		ptr.unitbytes = (uint)(unsafe.Sizeof(val[0]))
-
 		return ptr, nil
 	case []float64:
 		ptr.ptr = unsafe.Pointer(&val[0])
