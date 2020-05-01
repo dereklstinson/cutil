@@ -2,7 +2,7 @@ package cutil
 
 import "unsafe"
 
-//Mem is mem that is shared betweek cuda packages
+//Mem is mem that is shared between cuda packages
 type Mem interface {
 	Pointer
 	DPointer
